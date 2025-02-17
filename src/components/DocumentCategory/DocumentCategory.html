@@ -1,0 +1,19 @@
+<div class="document-category" data-bind="draggable: true, css: {open: isOpen}, attr: {'data-category-id': id}">
+    <div class="category-header">
+        <button class="toggle-btn arrow-down" data-bind="visible: isOpen, click: toggle">
+            <img class="toggle-icon" src="../../assets/icons/toggleArrow.svg" alt="">
+        </button>
+
+        <button class="toggle-btn arrow-up" data-bind="visible: isClosed, click: toggle">
+            <img src="../../assets/icons/toggleArrow.svg" alt="" style="rotate: 180deg">
+        </button>
+
+        <h3 class="category-title" data-bind="text: title"></h3>
+        <button class="move-handle">
+            <img class="move-icon" src="../../assets/icons/moveArrow.svg" alt="">
+        </button>
+    </div>
+</div>
+<div class="items" data-bind="visible: isOpen, template: { foreach: items }">
+    <document-item params="parentId: $parent.id, item: $data, onMove: $parent.moveItem"></document-item>
+</div>
