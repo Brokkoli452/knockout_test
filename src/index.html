@@ -28,12 +28,14 @@
                         </button>
                     </div>
                 </div>
-                <div class="items container" data-bind="visible: isOpen, template: { foreach: items }">
-                    <div params="parentId: $parent.id, item: $data, onMove: $parent.moveItem" class="document-item draggable" data-bind="draggable: true">
-                        <span class="item-title" data-bind="text: name"></span>
-                        <button class="move-handle">
-                            <img class="move-icon" src="assets/icons/moveArrow.svg" alt="">
-                        </button>
+                <div>
+                    <div class="items container" data-bind="visible: isOpen, template: { foreach: items }">
+                        <div params="parentId: $parent.id, item: $data, onMove: $parent.moveItem" class="document-item draggable" data-bind="draggable: true">
+                            <span class="item-title" data-bind="text: name"></span>
+                            <button class="move-handle">
+                                <img class="move-icon" src="assets/icons/moveArrow.svg" alt="">
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

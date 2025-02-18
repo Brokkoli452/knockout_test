@@ -23,45 +23,35 @@ class DocumentCategory {
 
         if (this.isOpen() === false) {
             parent.classList.add("is-open")
+            this.isOpen(true);
+            this.isClosed(false);
             animateOpen(parent)
-            this.isOpen(!this.isOpen());
-            this.isClosed(!this.isClosed());
         } else {
             parent.classList.remove("is-open")
             animateClose(parent, this)
         }
-
-
     }
-
-    moveItem(item, newIndex) {
-        const oldIndex = this.items.indexOf(item);
-        if (oldIndex !== -1) {
-            this.items.splice(oldIndex, 1); // Удаляем элемент
-            this.items.splice(newIndex, 0, item); // Вставляем на новое место
-        }
-    }
-
 }
 
+// Открываем контейнер
 function animateOpen(elem) {
-    // Открываем контейнер
     gsap.fromTo(
-        elem,
+        elem.parentNode,
         { height: 0, opacity: 0 },
         {
             height: "auto",
             opacity: 1,
-            duration: 0.1,
+            duration: 0.2,
         }
     );
 }
+
+// Закрываем контейнер
 function animateClose(elem, context) {
-    // Закрываем контейнер
-    gsap.to(elem, {
+    gsap.to(elem.parentNode, {
         height: 0,
         opacity: 0,
-        duration: 0.1,
+        duration: 0.2,
         onComplete: function()  {
             elem.classList.remove("is-open");
 
