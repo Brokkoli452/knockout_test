@@ -17,6 +17,7 @@
 .categories {
     width: 500px;
     max-width: 50%;
+    padding: 20px 0;
 }
 
 .document-category {
@@ -53,7 +54,20 @@
     border-top: 1px solid rgba(0,0,0,0);
 }
 
+.items.is-open {
+}
+
+@keyframes open {
+    from {
+        height: 0;
+    }
+    to {
+        height: 50px;
+    }
+}
+
 .document-item {
+
     display: flex;
     justify-content: start;
     align-items: center;
@@ -68,8 +82,8 @@
     font-size: 13px;
     font-weight: 400;
     font-family: 'Fira Sans', sans-serif;
-
 }
+
 
 .item-title {
     padding: 10px 0 10px 15px;
@@ -89,12 +103,12 @@
 }
 
 .draggable {
-    transition: transform 0.2s ease, opacity 0.2s ease;
     position: relative;
+    transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.1s ease;
 }
 
 .draggable.dragging {
-    opacity: 0.5;
+    opacity: 0.4;
     z-index: 1000;
 }
 
@@ -119,22 +133,25 @@
     width: 8px;
 }
 
-@keyframes slide {
-    from {
-        height: 0;
-    }
-
-    to {
-        height: 35px;
-    }
+.container {
+    display: flex;
+    flex-direction: column;
+    height: max-content;
+    background: rgba(255, 255, 255, 0.2);
 }
 
-@keyframes unslide {
-    from {
-        height: 35px;
-    }
+.draggable {
+}
 
-    to {
-        height: 0;
-    }
+.dragging {
+    opacity: 0;
+    transform: scaleX(90%);
+}
+
+.highlight-top-border {
+    box-shadow: 0 -10px 1px 0 #0099ff;
+}
+
+.highlight-bottom-border {
+    box-shadow: 0 10px 1px 0 #0099ff;
 }

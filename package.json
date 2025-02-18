@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/knockout": "^3.4.77",
     "dotenv": "^16.4.7",
+    "gsap": "^3.12.7",
     "knockout": "^3.5.1"
   },
   "devDependencies": {

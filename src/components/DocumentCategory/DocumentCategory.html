@@ -1,4 +1,4 @@
-<div class="document-category" data-bind="draggable: true, css: {open: isOpen}, attr: {'data-category-id': id}">
+<div class="document-category draggable" draggable="true" data-bind="draggable: true, droppable: true, attr: {'data-category-id': id}">
     <div class="category-header">
         <button class="toggle-btn arrow-down" data-bind="visible: isOpen, click: toggle">
             <img class="toggle-icon" src="../../assets/icons/toggleArrow.svg" alt="">
@@ -14,6 +14,6 @@
         </button>
     </div>
 </div>
-<div class="items" data-bind="visible: isOpen, template: { foreach: items }">
+<div class="items container" data-bind="visible: isOpen, template: { foreach: items }">
     <document-item params="parentId: $parent.id, item: $data, onMove: $parent.moveItem"></document-item>
 </div>

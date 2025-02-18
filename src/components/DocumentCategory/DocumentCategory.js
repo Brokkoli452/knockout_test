@@ -1,4 +1,5 @@
 import ko from 'knockout';
+import {gsap} from "gsap";
 
 class DocumentCategory {
     constructor(params) {
@@ -9,13 +10,28 @@ class DocumentCategory {
         this.isClosed = ko.observable(true);
     }
 
-    async toggle(elem) {
-        console.log(elem.items)
+    async toggle(obj, event) {
+        let parent = event.target
 
-        const done = setTimeout(() => {
+        if (parent === event.currentTarget) {
+            parent = parent.parentNode.parentNode.parentNode.querySelector('.items')
+            console.log(parent)
+        } else {
+            parent = parent.parentNode.parentNode.parentNode.parentNode.querySelector('.items')
+            parent.classList.add("is-open")
+        }
+
+        if (this.isOpen() === false) {
+            parent.classList.add("is-open")
+            animateOpen(parent)
             this.isOpen(!this.isOpen());
             this.isClosed(!this.isClosed());
-        }, 300)
+        } else {
+            parent.classList.remove("is-open")
+            animateClose(parent, this)
+        }
+
+
     }
 
     moveItem(item, newIndex) {
@@ -26,6 +42,33 @@ class DocumentCategory {
         }
     }
 
+}
+
+function animateOpen(elem) {
+    // Открываем контейнер
+    gsap.fromTo(
+        elem,
+        { height: 0, opacity: 0 },
+        {
+            height: "auto",
+            opacity: 1,
+            duration: 0.1,
+        }
+    );
+}
+function animateClose(elem, context) {
+    // Закрываем контейнер
+    gsap.to(elem, {
+        height: 0,
+        opacity: 0,
+        duration: 0.1,
+        onComplete: function()  {
+            elem.classList.remove("is-open");
+
+            context.isOpen(false);
+            context.isClosed(true);
+        },
+    });
 }
 
 export default DocumentCategory;

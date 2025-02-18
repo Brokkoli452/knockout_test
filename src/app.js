@@ -3,6 +3,157 @@ import DocumentCategory from './components/DocumentCategory/DocumentCategory';
 import DocumentItem from './components/DocumentItem/DocumentItem';
 import './index.css'
 
+document.addEventListener("DOMContentLoaded", function () {
+    const draggableCategories = document.querySelectorAll(".categories.container > .draggable");
+    const CategoryContainers = document.querySelectorAll(".categories.container");
+    const draggableItems = document.querySelectorAll(".document-item.draggable");
+    const ItemContainers = document.querySelectorAll(".items.container");
+
+    console.log(`draggableCategories: `);
+    console.log(draggableCategories);
+
+    // Функция для перетаскивания категорий
+    function dragNDropCategories(draggables, containers) {
+        draggables.forEach((draggable) => {
+            const handle = draggable.querySelector('.move-handle')
+            handle.onmousedown = function(e) {
+                e.target.parentNode.setAttribute('draggable', 'true')
+            };
+            handle.onmouseup = function(e) {
+                e.target.parentNode.setAttribute('draggable', 'false')
+            };
+
+            draggable.addEventListener("dragstart", (e) => {
+                // Проверяем, что перетаскивается именно категория, а не элемент
+                if (!e.target.classList.contains("document-item")) {
+                    draggable.classList.add("dragging");
+                    console.log("Dragging category: ", draggable);
+                }
+            });
+
+            draggable.addEventListener("dragend", (e) => {
+                draggable.classList.remove("dragging");
+                containers.forEach((container) => {
+                    clearHighlights(container);
+                });
+            });
+        });
+
+        containers.forEach((container) => {
+            container.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                const dragging = container.querySelector(".dragging");
+
+                if (!dragging || dragging.classList.contains("document-item")) return; // Проверяем, что dragging существует
+
+                const dropTarget = getDropPosition(container, e.clientY);
+
+                if (dropTarget && !dragging.contains(dropTarget)) {
+                    container.children[container.children.length - 1].classList.remove(
+                        "highlight-bottom-border"
+                    );
+                    dropTarget.classList.add("highlight-top-border");
+                    container.insertBefore(dragging, dropTarget);
+                } else if (!dropTarget) {
+                    container.appendChild(dragging);
+                    clearHighlights(container);
+                    container.lastChild.classList.add("highlight-bottom-border");
+                }
+            });
+
+            container.addEventListener("dragleave", (e) => {
+                e.preventDefault();
+                clearHighlights(container);
+            });
+        });
+    }
+
+    // Функция для перетаскивания элементов
+    function dragNDropItems(draggables, containers) {
+        draggables.forEach((draggable) => {
+            const handle = draggable.querySelector('.move-handle')
+            handle.onmousedown = function(e) {
+                e.target.parentNode.setAttribute('draggable', 'true')
+            };
+            handle.onmouseup = function(e) {
+                e.target.parentNode.setAttribute('draggable', 'false')
+            };
+
+            draggable.addEventListener("dragstart", (e) => {
+                // Останавливаем всплытие события, чтобы не активировать перетаскивание категории
+                e.stopPropagation();
+                draggable.classList.add("dragging");
+                console.log("Dragging item: ", draggable);
+            });
+
+            draggable.addEventListener("dragend", (e) => {
+                draggable.classList.remove("dragging");
+                containers.forEach((container) => {
+                    clearHighlights(container);
+                });
+            });
+        });
+
+        containers.forEach((container) => {
+            container.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                const dragging = document.querySelector(".dragging");
+
+                if (!dragging || !dragging.classList.contains("document-item")) {
+                    return; // Проверяем, что dragging существует и принадлежит этому контейнеру
+                }
+
+                const dropTarget = getDropPosition(container, e.clientY);
+
+                if (dropTarget && !dragging.contains(dropTarget)) {
+                    container.children[container.children.length - 1].classList.remove(
+                        "highlight-bottom-border"
+                    );
+                    dropTarget.classList.add("highlight-top-border");
+                    container.insertBefore(dragging, dropTarget);
+                } else if (!dropTarget) {
+                    container.appendChild(dragging);
+                    clearHighlights(container);
+                    container.lastChild.classList.add("highlight-bottom-border");
+                }
+            });
+
+            container.addEventListener("dragleave", (e) => {
+                e.preventDefault();
+                clearHighlights(container);
+            });
+        });
+    }
+
+    // Общая функция для определения позиции drop
+    function getDropPosition(container, y) {
+        const draggableElements = [
+            ...container.querySelectorAll(".draggable:not(.dragging)"),
+        ];
+        for (const draggable of draggableElements) {
+            const pos = draggable.getBoundingClientRect();
+            if (y < pos.bottom && pos.bottom - y > 20) {
+                return draggable;
+            }
+        }
+        return null;
+    }
+
+    // Общая функция для очистки подсветки
+    function clearHighlights(container) {
+        for (const child of container.children) {
+            child.classList.remove("highlight-top-border");
+            child.classList.remove("highlight-bottom-border");
+        }
+    }
+
+    // Инициализация перетаскивания для категорий и элементов
+    dragNDropCategories(draggableCategories, CategoryContainers);
+    dragNDropItems(draggableItems, ItemContainers);
+
+});
+
+
 // Данные для категорий и элементов
 const categories = [
     {
@@ -37,6 +188,8 @@ class AppViewModel {
         this.draggedItem = ko.observable(null);
         this.draggedCategory = ko.observable(null);
         this.initialPosition = null;
+
+
     }
 
     moveItem(item, newCategoryId, newIndex) {

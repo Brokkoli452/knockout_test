@@ -10,8 +10,33 @@
     <link href="index.css" rel="stylesheet">
 
     <div class="documents-section">
-        <div class="categories" data-bind="foreach: categories">
-            <document-category params="id: id, title: title, items: items"></document-category>
+        <div class="categories container" data-bind="foreach: categories">
+            <div class="category draggable">
+                <div class="document-category" data-bind="draggable: true, droppable: true, attr: {'data-category-id': id}">
+                    <div class="category-header">
+                        <button class="toggle-btn arrow-down" data-bind="visible: isOpen, click: toggle">
+                            <img class="toggle-icon" src="assets/icons/toggleArrow.svg" alt="">
+                        </button>
+
+                        <button class="toggle-btn arrow-up" data-bind="visible: isClosed, click: toggle">
+                            <img src="assets/icons/toggleArrow.svg" alt="" style="rotate: 180deg">
+                        </button>
+
+                        <h3 class="category-title" data-bind="text: title"></h3>
+                        <button class="move-handle">
+                            <img class="move-icon" src="assets/icons/moveArrow.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div class="items container" data-bind="visible: isOpen, template: { foreach: items }">
+                    <div params="parentId: $parent.id, item: $data, onMove: $parent.moveItem" class="document-item draggable" data-bind="draggable: true">
+                        <span class="item-title" data-bind="text: name"></span>
+                        <button class="move-handle">
+                            <img class="move-icon" src="assets/icons/moveArrow.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
