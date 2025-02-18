@@ -212,12 +212,10 @@ class AppViewModel {
 // Регистрация компонентов
 ko.components.register('document-category', {
     viewModel: DocumentCategory,
-    template: require('./components/DocumentCategory/DocumentCategory.html').default
 });
 
 ko.components.register('document-item', {
     viewModel: DocumentItem,
-    template: require('./components/DocumentItem/DocumentItem.html').default
 });
 
 // Привязка ViewModel к View

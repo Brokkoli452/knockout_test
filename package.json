@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
-    "serve": "cross-env NODE_ENV=development webpack serve"
+    "build": "webpack --mode production",
+    "serve": "npm run build && webpack serve --mode development --open"
   },
   "dependencies": {
     "@types/knockout": "^3.4.77",
